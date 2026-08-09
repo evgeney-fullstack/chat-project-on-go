@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/evgeney-fullstack/chat-project-on-go/internal/app"
 	"github.com/evgeney-fullstack/chat-project-on-go/internal/config"
@@ -43,6 +46,19 @@ func main() {
 
 	// Логируем в файл информацию о старте сервера: адрес и максимальное число клиентов.
 	loggerApp.Info("server starting", "addr", cfg.Addr, "max_clients", cfg.MaxClients)
+
+	// Запускаем горутину для обработки сигналов операционной системы.
+	go func() {
+		// Создаём буферизированный канал для сигналов (ёмкость 1).
+		sigChan := make(chan os.Signal, 1)
+		// Подписываемся на сигналы SIGINT (Ctrl+C) и SIGTERM (завершение от системы).
+		signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+		// Блокируемся, пока не придёт один из этих сигналов.
+		<-sigChan
+		// Когда сигнал получен, вызываем функцию отмены контекста.
+		// Это приведёт к остановке сервера.
+		cancel()
+	}()
 
 	// Запускаем основной цикл сервера: принятие подключений и их обработка.
 	// Передаём контекст, чтобы сервер мог корректно завершиться при отмене.
