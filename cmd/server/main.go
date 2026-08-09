@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/evgeney-fullstack/chat-project-on-go/internal/app"
 	"github.com/evgeney-fullstack/chat-project-on-go/internal/config"
 	"github.com/evgeney-fullstack/chat-project-on-go/internal/logger_app"
 )
@@ -19,5 +20,8 @@ func main() {
 	if err != nil { // Если не удалось создать логгер (например, не открывается файл).
 		log.Fatalf("failed to init logger: %v", err) // Завершаем программу с ошибкой.
 	}
+
+	// Создаём сервис чата, который управляет сессиями клиентов.
+	service := app.NewChatService(cfg.MaxClients)
 
 }
