@@ -91,12 +91,13 @@ chat-project-on-go/
 │   │   └── main.cpp
 ├── internal/
 │   ├── app/
-│   │   └── app.go
+│   │   └── chat.go
 │   ├── config/
 │   │   └── config.go
-│   ├── log/
+│   ├── logger_app/
 │   │   └── logger.go
 │   └── transport/
+│       ├── protocol.go
 │       ├── tcp_client.go
 │       └── tcp_server.go
 │ 
