@@ -99,11 +99,7 @@ chat-project-on-go/
 │   └── transport/
 │       ├── tcp_client.go
 │       └── tcp_server.go
-├── tests/
-│   ├── unit/
-│   │   └── main.go
-│   └── integration/
-│       └── main.go│
+│ 
 ├── config.env
 └── README.md
 
