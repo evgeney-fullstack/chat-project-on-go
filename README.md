@@ -26,33 +26,39 @@
 ## 🛠 Сборка и запуск
 
 ### Требования
-- Компилятор с поддержкой 
+- Компилятор go 1.22.2
 
 ### Сборка
 ```bash
-git clone https://github.com/evgeney-fullstack/chat_app.git
-cd chat_app
-mkdir build && cd build
+git clone https://github.com/evgeney-fullstack/chat-project-on-go.git
+cd chat-project-on-go
+make
+cd build
+
+После сборки в каталоге build/ появятся исполняемые файлы:
 
 server — серверное приложение
 
 client — клиентское приложение
 
+config.env - файл конфигурации
+
 Запуск
-Сервер (по умолчанию порт 1235):
+Сервер (по умолчанию порт 8080):
 
 bash
-./server [порт]
-Клиент (по умолчанию хост 192.168.1.104, порт 1235):
+./server
+Клиент (по умолчанию хост localhost, порт 8080):
 
 bash
-./client [IP-адрес] [порт]
+./client 
 Пример:
 
 bash
 ./server 8080
 ./client 127.0.0.1 8080   # в другом терминале
 ./client 127.0.0.1 8080   # второй клиент
+
 💬 Протокол общения
 Сообщения передаются в виде текстовых строк, заканчивающихся символом \n (разделитель).
 
@@ -74,18 +80,6 @@ EXIT — завершает клиент (локальная команда).
 
 STATS — показать статистику (локальная команда).
 
-🧱 Архитектура проекта
-Сервер:
-
-Логирование выполняется асинхронно через отдельный класс Logger с блокировкой.
-
-Клиент:
-
-Работает в одном потоке, используя select() для одновременного мониторинга сокета и стандартного ввода.
-
-Ввод организован посимвольно в неблокирующем режиме (fcntl + O_NONBLOCK), что позволяет реагировать на входящие сообщения без задержек.
-
-Статистика (время соединения, счётчики) обновляется атомарно.
 
 📁 Структура проекта
 text
@@ -103,45 +97,37 @@ chat-project-on-go/
 │   ├── log/
 │   │   └── logger.go
 │   └── transport/
-├──     ├── tcp_client.go
+│       ├── tcp_client.go
 │       └── tcp_server.go
 ├── tests/
 │   ├── unit/
 │   │   └── main.go
 │   └── integration/
-│       └── main.go
-│
+│       └── main.go│
+├── config.env
 └── README.md
+
+
 🧪 Пример работы
-text
+
 $ ./server
-Server listening on port 1235
-Client #0 connected (fd=4)
-Client #1 connected (fd=5)
+text
+Server listening on localhost:8080
+Client #1 connected
+Client #2 connected
 Both clients connected. Chat started!
-[Client #0] Hello!
-Relayed to client #1: Hello!
-[Client #1] Hi there!
-Relayed to client #0: Hi there!
-...
+
 Клиентский вывод:
+$ ./client
 
 text
-Connected to 127.0.0.1:1235
-[System] Chat started. You can send messages.
+Connected to 127.0.0.1:8080
+System Chat started. You can send messages.
 You: Hello!
-[Friend] Hi there!
+You: 
+Friend: Hi there! 
 You: STATS
-===== STATISTICS =====
-Connected for: 12 seconds
-Messages sent: 1
-Messages received: 1
-======================
-You: EXIT
-Exiting...
-Client stopped.
-🧰 Технологии
-
+STATS: connected since 3m10s, sent 1, received 2
 
 Автор: Ковалё Евгений
 GitHub: evgeney-fullstack
